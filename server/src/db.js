@@ -33,6 +33,11 @@ function dbConfig() {
     connectionLimit: 10,
     queueLimit: 0,
     dateStrings: true,
+    // Survive DB restarts / wait_timeout: keep pooled sockets alive and
+    // retire idle ones before the server can drop them.
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 10000,
+    idleTimeout: 60000,
   };
 }
 
