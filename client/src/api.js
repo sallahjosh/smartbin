@@ -1,7 +1,14 @@
 /**
  * Minimal API helper. Sends JSON with the stored JWT (if any).
+ *
+ * In development the Vite dev server proxies /api to the local backend
+ * (see vite.config.js). In production, set VITE_API_URL to the backend
+ * origin (e.g. https://api.example.com) in the hosting provider's
+ * environment variables; requests then go to <VITE_API_URL>/api/...
  */
-const BASE = '/api';
+const BASE = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL.replace(/\/+$/, '')}/api`
+  : '/api';
 
 async function request(path, options = {}) {
   const token = localStorage.getItem('sb_token');
