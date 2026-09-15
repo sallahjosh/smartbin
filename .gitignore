@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+*.log
+storage/logs/*
+server/storage/logs/*
+!storage/logs/.gitkeep
+!server/storage/logs/.gitkeep
