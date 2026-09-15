@@ -19,7 +19,15 @@ async function request(path, options = {}) {
   const data = await res.json().catch(() => null);
 
   if (!res.ok) {
-    const msg = (data && data.message) || `Request failed (${res.status})`;
+    let msg = (data && data.message) || `Request failed (${res.status})`;
+    // A 404 on /api from a static host means the backend is missing there,
+    // not the route: give an actionable hint instead of a bare status.
+    if (res.status === 404 && !data) {
+      msg =
+        location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+          ? msg
+          : `${msg} — the API server is not reachable from this deployment. Set VITE_API_URL to your hosted backend URL.`;
+    }
     throw Object.assign(new Error(msg), { status: res.status, data });
   }
   return data;
